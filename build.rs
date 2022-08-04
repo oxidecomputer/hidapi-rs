@@ -129,8 +129,12 @@ fn compile_illumos() {
             "ILLUMOS_STATIC_LIBUSB",
             Box::new(|| {
                 let mut config = cc::Build::new();
+
+                // For details on why we set NO_ICONV here, see
+                // https://github.com/oxidecomputer/humility/issues/202
                 config
                     .file("etc/hidapi/libusb/hid.c")
+                    .define("NO_ICONV", None)
                     .include("etc/hidapi/hidapi");
                 let lib =
                     pkg_config::find_library("libusb-1.0").expect("Unable to find libusb-1.0");
